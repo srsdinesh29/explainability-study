@@ -373,28 +373,34 @@
     </div>
   </div>
 
-  <!-- Checklist Section -->
-  <div class="checklist-section">
-    <div class="section-title" style="margin-left:0;padding-left:12px;">Condition B — Evaluation Checklist</div>
+ <!-- Checklist Section -->
+<div class="checklist-section">
+  <div class="section-title" style="margin-left:0;padding-left:12px;">
+    Condition B — Evaluation Checklist
+  </div>
 
-    <div class="checklist-card">
+  <div class="checklist-card">
 
-      <div id="form-area">
-        <h2>Please complete the checklist below</h2>
-        <p class="checklist-instruction">
-          Review the Condition B image above carefully (click it to enlarge). Answer each question
-          honestly based on what you observe. All questions must be answered before you can submit.
-        </p>
-        
-      <label>First Name:<br>
-         <input type="text" name="firstname" required>
-      </label>
-      <br><br>
-      
-      <label>Last Name:<br>
+    <div id="form-area">
+      <h2>Please complete the checklist below</h2>
+      <p class="checklist-instruction">
+        Review the Condition B image above carefully (click it to enlarge). Answer each question
+        honestly based on what you observe. All questions must be answered before you can submit.
+      </p>
+
+      <!-- ⭐ FORM STARTS HERE -->
+      <form id="evaluationForm">
+
+        <!-- Name Fields -->
+        <label>First Name:<br>
+          <input type="text" name="firstname" required>
+        </label>
+        <br><br>
+
+        <label>Last Name:<br>
           <input type="text" name="lastname" required>
-      </label>
-      <br><br>
+        </label>
+        <br><br>
 
         <!-- Q1 -->
         <div class="question-row" id="row-1">
@@ -435,17 +441,22 @@
         <div id="error-msg">⚠ Please answer all questions before submitting.</div>
 
         <button class="submit-btn" onclick="handleSubmit()">Submit Evaluation</button>
-      </div>
 
-      <!-- Success -->
-      <div id="success-panel">
-        <div class="check-icon">✓</div>
-        <h2>Submitted Successfully!</h2>
-        <p>Thank you for completing the evaluation. Your responses have been recorded.</p>
-      </div>
+      </form>
+      <!-- ⭐ FORM ENDS HERE -->
 
     </div>
+
+    <!-- Success -->
+    <div id="success-panel">
+      <div class="check-icon">✓</div>
+      <h2>Submitted Successfully!</h2>
+      <p>Thank you for completing the evaluation. Your responses have been recorded.</p>
+    </div>
+
   </div>
+</div>
+
 
   <!-- Footer -->
   <footer>AI Explainability Research Study &nbsp;|&nbsp; &copy; 2026</footer>
