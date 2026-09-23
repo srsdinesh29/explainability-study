@@ -478,32 +478,48 @@
       if (e.key === 'Escape') closeLightbox();
     });
 
-    /* ── Form submission ── */
-    function handleSubmit() {
-      const questions = ['q1', 'q2', 'q3', 'q4'];
-      let allAnswered = true;
+/* ── Form submission ── */
+function handleSubmit() {
 
-      questions.forEach(function(name, idx) {
-        const answered = document.querySelector('input[name="' + name + '"]:checked');
-        const row = document.getElementById('row-' + (idx + 1));
-        if (!answered) {
-          allAnswered = false;
-          row.classList.add('error');
-        } else {
-          row.classList.remove('error');
-        }
-      });
+  // ⭐ Name validation
+  const first = document.querySelector('input[name="firstname"]').value.trim();
+  const last  = document.querySelector('input[name="lastname"]').value.trim();
 
-      const errMsg = document.getElementById('error-msg');
-      if (!allAnswered) {
-        errMsg.style.display = 'block';
-        return;
-      }
+  const errMsg = document.getElementById('error-msg');
 
-      errMsg.style.display = 'none';
-      document.getElementById('form-area').style.display = 'none';
-      document.getElementById('success-panel').style.display = 'block';
+  if (first === "" || last === "") {
+    errMsg.innerText = "⚠ Please enter your first and last name.";
+    errMsg.style.display = "block";
+    return; // stop submission
+  }
+
+  // ⭐ Question validation
+  const questions = ['q1', 'q2', 'q3', 'q4'];
+  let allAnswered = true;
+
+  questions.forEach(function(name, idx) {
+    const answered = document.querySelector('input[name="' + name + '"]:checked');
+    const row = document.getElementById('row-' + (idx + 1));
+    if (!answered) {
+      allAnswered = false;
+      row.classList.add('error');
+    } else {
+      row.classList.remove('error');
     }
+  });
+
+  if (!allAnswered) {
+    errMsg.innerText = "⚠ Please answer all questions before submitting.";
+    errMsg.style.display = "block";
+    return;
+  }
+
+  // ⭐ If everything is valid, show success panel
+  errMsg.style.display = 'none';
+  document.getElementById('form-area').style.display = 'none';
+  document.getElementById('success-panel').style.display = 'block';
+}
+
 
     /* Clear error highlight on change */
     document.querySelectorAll('input[type="radio"]').forEach(function(radio) {
