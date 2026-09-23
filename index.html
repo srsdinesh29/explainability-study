@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Evaluating Explainability Interfaces to Mitigate Blind Reliance in AI-Assisted Quantification</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background: #f4f6f9;
+      color: #222;
+    }
+
+    /* ── Header ── */
+    header {
+      background: #1a2a4a;
+      color: #fff;
+      padding: 28px 24px;
+      text-align: center;
+    }
+    header h1 {
+      font-size: clamp(1rem, 2.5vw, 1.5rem);
+      font-weight: 700;
+      line-height: 1.4;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    /* ── Intro ── */
+    .intro {
+      max-width: 900px;
+      margin: 28px auto 0;
+      padding: 0 20px;
+      font-size: 0.97rem;
+      color: #444;
+      line-height: 1.7;
+      text-align: center;
+    }
+
+    /* ── Section titles ── */
+    .section-title {
+      max-width: 960px;
+      margin: 36px auto 16px;
+      padding: 0 20px;
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: #1a2a4a;
+      border-left: 4px solid #1a2a4a;
+      padding-left: 12px;
+    }
+
+    /* ── Image grid ── */
+    .image-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 0 20px;
+      justify-content: center;
+    }
+
+    .img-card {
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.09);
+      flex: 1 1 260px;
+      max-width: 300px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .img-card-label {
+      font-size: 0.85rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-align: center;
+      padding: 10px 14px;
+      text-transform: uppercase;
+    }
+    .label-original  { background: #e5e7eb; color: #374151; }
+    .label-a         { background: #fef3c7; color: #92400e; }
+    .label-b         { background: #d1fae5; color: #065f46; }
+
+    .img-card img {
+      width: 100%;
+      display: block;
+      object-fit: contain;
+      background: #f9fafb;
+      padding: 8px;
+    }
+
+    /* Condition B image — clickable */
+    .img-card.clickable img {
+      cursor: zoom-in;
+      transition: opacity 0.2s;
+    }
+    .img-card.clickable img:hover { opacity: 0.85; }
+
+    .zoom-hint {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      font-size: 0.78rem;
+      color: #065f46;
+      background: #ecfdf5;
+      padding: 6px 10px;
+      font-style: italic;
+    }
+    .zoom-hint svg { flex-shrink: 0; }
+
+    .img-desc {
+      font-size: 0.8rem;
+      color: #6b7280;
+      font-style: italic;
+      padding: 10px 14px 14px;
+      line-height: 1.5;
+    }
+
+    /* ── Lightbox ── */
+    #lightbox {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.85);
+      z-index: 9999;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      padding: 20px;
+    }
+    #lightbox.active { display: flex; }
+
+    #lightbox img {
+      max-width: 92vw;
+      max-height: 84vh;
+      border-radius: 8px;
+      box-shadow: 0 8px 40px rgba(0,0,0,0.6);
+      object-fit: contain;
+    }
+
+    #lightbox-close {
+      position: absolute;
+      top: 16px;
+      right: 22px;
+      background: none;
+      border: none;
+      color: #fff;
+      font-size: 2.2rem;
+      cursor: pointer;
+      line-height: 1;
+      font-weight: 300;
+    }
+    #lightbox-close:hover { color: #f87171; }
+
+    #lightbox-caption {
+      margin-top: 14px;
+      color: #d1fae5;
+      font-size: 0.9rem;
+      font-style: italic;
+      text-align: center;
+    }
+
+    /* ── Checklist ── */
+    .checklist-section {
+      max-width: 720px;
+      margin: 36px auto 0;
+      padding: 0 20px;
+    }
+
+    .checklist-card {
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+      padding: 28px 32px;
+    }
+
+    .checklist-card h2 {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: #065f46;
+      margin-bottom: 6px;
+    }
+
+    .checklist-instruction {
+      font-size: 0.88rem;
+      color: #6b7280;
+      margin-bottom: 24px;
+      line-height: 1.6;
+    }
+
+    .question-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 16px;
+      border-radius: 8px;
+      margin-bottom: 10px;
+      background: #f9fafb;
+      border: 2px solid transparent;
+      transition: border-color 0.2s;
+      gap: 16px;
+    }
+    .question-row.error { border-color: #ef4444; background: #fef2f2; }
+
+    .question-text {
+      font-size: 0.95rem;
+      color: #1f2937;
+      flex: 1;
+    }
+    .question-num {
+      font-weight: 700;
+      color: #1a2a4a;
+      margin-right: 8px;
+    }
+
+    .radio-group {
+      display: flex;
+      gap: 18px;
+      flex-shrink: 0;
+    }
+    .radio-group label {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+      color: #374151;
+    }
+    .radio-group input[type="radio"] {
+      width: 17px;
+      height: 17px;
+      cursor: pointer;
+      accent-color: #1a2a4a;
+    }
+
+    /* error message */
+    #error-msg {
+      display: none;
+      background: #fef2f2;
+      border: 1px solid #fca5a5;
+      color: #b91c1c;
+      border-radius: 8px;
+      padding: 10px 16px;
+      font-size: 0.88rem;
+      margin-top: 16px;
+    }
+
+    /* submit button */
+    .submit-btn {
+      display: block;
+      width: 100%;
+      margin-top: 24px;
+      padding: 14px;
+      background: #1a2a4a;
+      color: #fff;
+      font-size: 1rem;
+      font-weight: 700;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      letter-spacing: 0.03em;
+      transition: background 0.2s;
+    }
+    .submit-btn:hover { background: #263f6e; }
+
+    /* ── Success panel ── */
+    #success-panel {
+      display: none;
+      text-align: center;
+      padding: 48px 32px;
+    }
+    #success-panel .check-icon {
+      width: 72px;
+      height: 72px;
+      background: #d1fae5;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 20px;
+      font-size: 2.2rem;
+      color: #065f46;
+    }
+    #success-panel h2 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #065f46;
+      margin-bottom: 10px;
+    }
+    #success-panel p {
+      font-size: 0.95rem;
+      color: #6b7280;
+    }
+
+    /* ── Footer ── */
+    footer {
+      text-align: center;
+      padding: 32px 20px;
+      font-size: 0.78rem;
+      color: #9ca3af;
+      margin-top: 48px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Header -->
+  <header>
+    <h1>Evaluating Explainability Interfaces to Mitigate Blind Reliance in AI-Assisted Quantification</h1>
+  </header>
+
+  <!-- Intro -->
+  <p class="intro">
+    This study investigates whether explainability interfaces help users make more accurate judgments
+    when working alongside AI systems. Please review the images below carefully, then complete the
+    evaluation checklist for Condition B.
+  </p>
+
+  <!-- Images Section -->
+  <div class="section-title">Study Images</div>
+
+  <div class="image-grid">
+
+    <!-- Original -->
+    <div class="img-card">
+      <div class="img-card-label label-original">Original Image</div>
+      <img src="original.png" alt="Original Image" />
+      <p class="img-desc">The unmodified scene containing a mix of colored shapes — red circles, a red triangle, and other non-red objects (blue, green, yellow, pink).</p>
+    </div>
+
+    <!-- Condition A -->
+    <div class="img-card">
+      <div class="img-card-label label-a">Condition A – No Explainability</div>
+      <img src="condition_a.png" alt="Condition A – No Explainability" />
+      <p class="img-desc">The AI has counted the red circles (Total = 12), but provides no visual explanation. Users must trust the count without any supporting evidence.</p>
+    </div>
+
+    <!-- Condition B -->
+    <div class="img-card clickable">
+      <div class="img-card-label label-b">Condition B – Explainability Interface</div>
+      <img
+        src="condition_b.png"
+        alt="Condition B – Explainability Interface"
+        id="condBThumb"
+        onclick="openLightbox()"
+        title="Click to enlarge"
+      />
+      <div class="zoom-hint">
+        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+          <line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/>
+        </svg>
+        Click image to enlarge for closer inspection
+      </div>
+      <p class="img-desc">The AI displays bounding boxes around detected objects and a confidence score (0.00–0.99) above each. Green boxes indicate high-confidence detections. Total Red Circles = 12.</p>
+    </div>
+
+  </div>
+
+  <!-- Lightbox -->
+  <div id="lightbox" role="dialog" aria-modal="true" aria-label="Condition B enlarged view" onclick="closeLightboxOnBg(event)">
+    <button id="lightbox-close" onclick="closeLightbox()" title="Close">&times;</button>
+    <img src="condition_b.png" alt="Condition B – Enlarged" />
+    <div id="lightbox-caption">
+      Condition B – Explainability Interface &nbsp;|&nbsp;
+      Click anywhere outside the image or press <kbd style="background:#fff3;padding:1px 5px;border-radius:3px;">Esc</kbd> to close
+    </div>
+  </div>
+
+  <!-- Checklist Section -->
+  <div class="checklist-section">
+    <div class="section-title" style="margin-left:0;padding-left:12px;">Condition B — Evaluation Checklist</div>
+
+    <div class="checklist-card">
+
+      <div id="form-area">
+        <h2>Please complete the checklist below</h2>
+        <p class="checklist-instruction">
+          Review the Condition B image above carefully (click it to enlarge). Answer each question
+          honestly based on what you observe. All questions must be answered before you can submit.
+        </p>
+
+        <!-- Q1 -->
+        <div class="question-row" id="row-1">
+          <span class="question-text"><span class="question-num">1.</span> Did the AI detect all red circles?</span>
+          <div class="radio-group">
+            <label><input type="radio" name="q1" value="yes" /> Yes</label>
+            <label><input type="radio" name="q1" value="no"  /> No</label>
+          </div>
+        </div>
+
+        <!-- Q2 -->
+        <div class="question-row" id="row-2">
+          <span class="question-text"><span class="question-num">2.</span> Did the AI avoid detecting non-red objects?</span>
+          <div class="radio-group">
+            <label><input type="radio" name="q2" value="yes" /> Yes</label>
+            <label><input type="radio" name="q2" value="no"  /> No</label>
+          </div>
+        </div>
+
+        <!-- Q3 -->
+        <div class="question-row" id="row-3">
+          <span class="question-text"><span class="question-num">3.</span> Do you see bounding boxes for all the objects?</span>
+          <div class="radio-group">
+            <label><input type="radio" name="q3" value="yes" /> Yes</label>
+            <label><input type="radio" name="q3" value="no"  /> No</label>
+          </div>
+        </div>
+
+        <!-- Q4 -->
+        <div class="question-row" id="row-4">
+          <span class="question-text"><span class="question-num">4.</span> Are the confidence scores reasonable?</span>
+          <div class="radio-group">
+            <label><input type="radio" name="q4" value="yes" /> Yes</label>
+            <label><input type="radio" name="q4" value="no"  /> No</label>
+          </div>
+        </div>
+
+        <div id="error-msg">⚠ Please answer all questions before submitting.</div>
+
+        <button class="submit-btn" onclick="handleSubmit()">Submit Evaluation</button>
+      </div>
+
+      <!-- Success -->
+      <div id="success-panel">
+        <div class="check-icon">✓</div>
+        <h2>Submitted Successfully!</h2>
+        <p>Thank you for completing the evaluation. Your responses have been recorded.</p>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer>AI Explainability Research Study &nbsp;|&nbsp; &copy; 2026</footer>
+
+  <script>
+    /* ── Lightbox ── */
+    function openLightbox() {
+      document.getElementById('lightbox').classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+    function closeLightbox() {
+      document.getElementById('lightbox').classList.remove('active');
+      document.body.style.overflow = '';
+    }
+    function closeLightboxOnBg(e) {
+      if (e.target === document.getElementById('lightbox')) closeLightbox();
+    }
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') closeLightbox();
+    });
+
+    /* ── Form submission ── */
+    function handleSubmit() {
+      const questions = ['q1', 'q2', 'q3', 'q4'];
+      let allAnswered = true;
+
+      questions.forEach(function(name, idx) {
+        const answered = document.querySelector('input[name="' + name + '"]:checked');
+        const row = document.getElementById('row-' + (idx + 1));
+        if (!answered) {
+          allAnswered = false;
+          row.classList.add('error');
+        } else {
+          row.classList.remove('error');
+        }
+      });
+
+      const errMsg = document.getElementById('error-msg');
+      if (!allAnswered) {
+        errMsg.style.display = 'block';
+        return;
+      }
+
+      errMsg.style.display = 'none';
+      document.getElementById('form-area').style.display = 'none';
+      document.getElementById('success-panel').style.display = 'block';
+    }
+
+    /* Clear error highlight on change */
+    document.querySelectorAll('input[type="radio"]').forEach(function(radio) {
+      radio.addEventListener('change', function() {
+        const row = this.closest('.question-row');
+        if (row) row.classList.remove('error');
+      });
+    });
+  </script>
+
+</body>
+</html>
