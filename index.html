@@ -481,21 +481,22 @@
 /* ── Form submission ── */
 function handleSubmit() {
 
+  const errMsg = document.getElementById('error-msg');
+
   // ⭐ Name validation
   const first = document.querySelector('input[name="firstname"]').value.trim();
   const last  = document.querySelector('input[name="lastname"]').value.trim();
 
-  const errMsg = document.getElementById('error-msg');
-
   if (first === "" || last === "") {
     errMsg.innerText = "⚠ Please enter your first and last name.";
     errMsg.style.display = "block";
-    return; // stop submission
+    return;
   }
 
   // ⭐ Question validation
   const questions = ['q1', 'q2', 'q3', 'q4'];
   let allAnswered = true;
+  let answers = {};
 
   questions.forEach(function(name, idx) {
     const answered = document.querySelector('input[name="' + name + '"]:checked');
@@ -505,6 +506,7 @@ function handleSubmit() {
       row.classList.add('error');
     } else {
       row.classList.remove('error');
+      answers[name] = answered.value;
     }
   });
 
@@ -514,11 +516,30 @@ function handleSubmit() {
     return;
   }
 
-  // ⭐ If everything is valid, show success panel
+  // ⭐ Build payload to send to Google Apps Script
+  const payload = {
+    firstname: first,
+    lastname: last,
+    q1: answers.q1,
+    q2: answers.q2,
+    q3: answers.q3,
+    q4: answers.q4
+  };
+
+  // ⭐ SEND TO GOOGLE SCRIPT (your URL inserted)
+  fetch("https://script.google.com/macros/s/AKfycbyDpiRxIpLO0sruXRQSuCM99U3Rgy2Hj9AInlvBeRC3r6le-OuvP8LE2nm9pn45A7gQ8Q/exec", {
+    method: "POST",
+    mode: "no-cors",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(payload)
+  });
+
+  // ⭐ Show success panel
   errMsg.style.display = 'none';
   document.getElementById('form-area').style.display = 'none';
   document.getElementById('success-panel').style.display = 'block';
 }
+
 
 
     /* Clear error highlight on change */
