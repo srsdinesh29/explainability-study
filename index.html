@@ -93,6 +93,11 @@
       padding: 8px;
     }
 
+    .image-column .img-card {
+     max-width: none;
+     width: 100%;
+    }
+
     /* Condition B image — clickable */
     .img-card.clickable img {
       cursor: zoom-in;
@@ -311,20 +316,21 @@ Form + Condition B Layout
 ============================== */
  
 .evaluation-layout {
+max-width: 1400px;
+margin: 40px auto;
+padding: 0 20px;
+ 
 display: flex;
-flex-direction: row;
 align-items: flex-start;
 gap: 30px;
-width: 100%;
 }
  
 .form-column {
 flex: 1;
-min-width: 700px;
 }
  
 .image-column {
-width: 450px;
+width: 420px;
 flex-shrink: 0;
 }
  
@@ -337,15 +343,9 @@ top: 20px;
 max-width: 100%;
 }
  
-/* Mobile */
-@media (max-width: 1100px) {
- 
+@media (max-width: 1000px) {
 .evaluation-layout {
 flex-direction: column;
-}
- 
-.form-column {
-min-width: auto;
 }
  
 .image-column {
@@ -355,8 +355,7 @@ width: 100%;
 .sticky-image {
 position: static;
 }
-}
-	
+}	
   </style>
 </head>
 <body>
@@ -644,7 +643,6 @@ position: static;
 
   </div>
 
-</div>
 
 </div> <!-- evaluation-layout -->
 
@@ -732,13 +730,7 @@ body: JSON.stringify(payload)
 )
 .then(() => {
 errMsg.style.display = "none";
-document.getElementById("form-area").style.display = "none";
-document.getElementById("success-panel").style.display = "block";
-})
-.catch(error => {
-console.error(error);
-errMsg.innerText = "⚠ Error submitting form. Please try again.";
-errMsg.style.display = "block";
+document.ock";
 });
 
   // ⭐ Show success panel
