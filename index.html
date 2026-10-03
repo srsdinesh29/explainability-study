@@ -167,7 +167,7 @@
 
     /* ── Checklist ── */
     .checklist-section {
-      max-width: 720px;
+      max-width: 1300px;
       margin: 36px auto 0;
       padding: 0 20px;
     }
@@ -311,20 +311,20 @@ Form + Condition B Layout
 ============================== */
  
 .evaluation-layout {
-max-width: 1250px;
-margin: 36px auto;
-padding: 0 20px;
 display: flex;
-gap: 24px;
+flex-direction: row;
 align-items: flex-start;
+gap: 30px;
+width: 100%;
 }
  
 .form-column {
 flex: 1;
+min-width: 700px;
 }
  
 .image-column {
-width: 380px;
+width: 450px;
 flex-shrink: 0;
 }
  
@@ -338,9 +338,14 @@ max-width: 100%;
 }
  
 /* Mobile */
-@media (max-width: 900px) {
+@media (max-width: 1100px) {
+ 
 .evaluation-layout {
 flex-direction: column;
+}
+ 
+.form-column {
+min-width: auto;
 }
  
 .image-column {
@@ -420,7 +425,7 @@ position: static;
   </div>
 
  <!-- Checklist Section -->
-<div class="checklist-section">
+
   <!-- ====================================================
      CHECKLIST + CONDITION B SIDE BY SIDE
 ==================================================== -->
@@ -641,6 +646,9 @@ position: static;
 
 </div>
 
+</div> <!-- evaluation-layout -->
+
+
 
   <!-- Footer -->
   <footer>AI Explainability Research Study &nbsp;|&nbsp; &copy; 2026</footer>
@@ -711,7 +719,7 @@ function handleSubmit() {
   };
 
   // ⭐ SEND TO GOOGLE SCRIPT (your URL inserted)
-  fetch(
+fetch(
 "https://script.google.com/macros/s/AKfycbyDpiRxIpLO0sruXRQSuCM99U3Rgy2Hj9AInlvBeRC3r6le-OuvP8LE2nm9pn45A7gQ8Q/exec",
 {
 method: "POST",
@@ -721,7 +729,17 @@ headers: {
 },
 body: JSON.stringify(payload)
 }
-);
+)
+.then(() => {
+errMsg.style.display = "none";
+document.getElementById("form-area").style.display = "none";
+document.getElementById("success-panel").style.display = "block";
+})
+.catch(error => {
+console.error(error);
+errMsg.innerText = "⚠ Error submitting form. Please try again.";
+errMsg.style.display = "block";
+});
 
   // ⭐ Show success panel
   errMsg.style.display = 'none';
