@@ -314,48 +314,6 @@
     /* ==============================
 Form + Condition B Layout
 ============================== */
- 
-.evaluation-layout {
-max-width: 1400px;
-margin: 40px auto;
-padding: 0 20px;
- 
-display: flex;
-align-items: flex-start;
-gap: 30px;
-}
- 
-.form-column {
-flex: 1;
-}
- 
-.image-column {
-width: 420px;
-flex-shrink: 0;
-}
- 
-.sticky-image {
-position: sticky;
-top: 20px;
-}
- 
-.image-column .img-card {
-max-width: 100%;
-}
- 
-@media (max-width: 1000px) {
-.evaluation-layout {
-flex-direction: column;
-}
- 
-.image-column {
-width: 100%;
-}
- 
-.sticky-image {
-position: static;
-}
-}	
   </style>
 </head>
 <body>
@@ -431,217 +389,91 @@ position: static;
 
 <div class="evaluation-layout">
 
-  <!-- LEFT SIDE : FORM -->
-  <div class="form-column">
-
-    <div class="section-title" style="margin-top:0;">
-      Condition B — Evaluation Checklist
-    </div>
-
-    <div class="checklist-card">
-
-      <div id="form-area">
-
-        <h2>Please complete the checklist below</h2>
-
-        <p class="checklist-instruction">
-          Review the Condition B image displayed beside this form.
-          You may click the image to enlarge it for closer inspection.
-          Answer all questions before submitting.
-        </p>
-
-        <form id="evaluationForm">
-
-          <!-- First Name -->
-          <label>
-            First Name:
-            <br>
-            <input
-              type="text"
-              name="firstname"
-              required
-              style="width:100%;padding:10px;margin-top:5px;"
-            >
-          </label>
-
-          <br><br>
-
-          <!-- Last Name -->
-          <label>
-            Last Name:
-            <br>
-            <input
-              type="text"
-              name="lastname"
-              required
-              style="width:100%;padding:10px;margin-top:5px;"
-            >
-          </label>
-
-          <br><br>
-
-          <!-- Q1 -->
-          <div class="question-row" id="row-1">
-            <span class="question-text">
-              <span class="question-num">1.</span>
-              Did the AI detect all red circles?
-            </span>
-
-            <div class="radio-group">
-              <label>
-                <input type="radio" name="q1" value="yes">
-                Yes
-              </label>
-
-              <label>
-                <input type="radio" name="q1" value="no">
-                No
-              </label>
-            </div>
-          </div>
-
-          <!-- Q2 -->
-          <div class="question-row" id="row-2">
-            <span class="question-text">
-              <span class="question-num">2.</span>
-              Did the AI also detect non-red and other shape objects?
-            </span>
-
-            <div class="radio-group">
-              <label>
-                <input type="radio" name="q2" value="yes">
-                Yes
-              </label>
-
-              <label>
-                <input type="radio" name="q2" value="no">
-                No
-              </label>
-            </div>
-          </div>
-
-          <!-- Q3 -->
-          <div class="question-row" id="row-3">
-            <span class="question-text">
-              <span class="question-num">3.</span>
-              Do you see bounding boxes for all the objects?
-            </span>
-
-            <div class="radio-group">
-              <label>
-                <input type="radio" name="q3" value="yes">
-                Yes
-              </label>
-
-              <label>
-                <input type="radio" name="q3" value="no">
-                No
-              </label>
-            </div>
-          </div>
-
-          <!-- Q4 -->
-          <div class="question-row" id="row-4">
-            <span class="question-text">
-              <span class="question-num">4.</span>
-              Are the confidence scores reasonable?
-            </span>
-
-            <div class="radio-group">
-              <label>
-                <input type="radio" name="q4" value="yes">
-                Yes
-              </label>
-
-              <label>
-                <input type="radio" name="q4" value="no">
-                No
-              </label>
-            </div>
-          </div>
-
-          <div id="error-msg">
-            ⚠ Please answer all questions before submitting.
-          </div>
-
-          <button
-            type="button"
-            class="submit-btn"
-            onclick="handleSubmit()">
-            Submit Evaluation
-          </button>
-
-        </form>
-
-      </div>
-
-      <!-- SUCCESS PANEL -->
-
-      <div id="success-panel">
-
-        <div class="check-icon">
-          ✓
-        </div>
-
-        <h2>Submitted Successfully!</h2>
-
-        <p>
-          Thank you for completing the evaluation.
-          Your responses have been recorded.
-        </p>
-
-      </div>
-
-    </div>
-
-  </div>
-
-  <!-- RIGHT SIDE : CONDITION B IMAGE -->
-
-  <div class="image-column">
-
-    <div class="sticky-image">
-
-      <div class="img-card clickable">
-
-        <div class="img-card-label label-b">
-          Condition B – Explainability Interface
-        </div>
-
-        <img
-          src="condition_b.png"
-          alt="Condition B"
-          onclick="openLightbox()"
-          title="Click to enlarge"
-        >
-
-        <div class="zoom-hint">
-
-          <svg width="14" height="14" fill="none"
-               stroke="currentColor" stroke-width="2"
-               viewBox="0 0 24 24">
-            <circle cx="11" cy="11" r="8"></circle>
-            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-            <line x1="11" y1="8" x2="11" y2="14"></line>
-            <line x1="8" y1="11" x2="14" y2="11"></line>
-          </svg>
-
-          Click image to enlarge for closer inspection
-
-        </div>
-
-        <p class="img-desc">
-          The AI displays bounding boxes around detected objects and a
-          confidence score (0.00–0.99) above each.
-          Green boxes indicate high-confidence detections.
-          Total Red Circles = 13.
-        </p>
-
-      </div>
-
-    </div>
-
-  </div>
+  <!-- Condition B Checklist -->
+ 
+<div class="checklist-section">
+ 
+<div class="section-title">
+Condition B — Evaluation Checklist
+</div>
+ 
+<div class="checklist-card">
+ 
+<!-- CONDITION B IMAGE AT TOP -->
+ 
+<div class="img-card clickable"
+style="max-width:700px; margin:0 auto 25px;">
+ 
+<div class="img-card-label label-b">
+Condition B – Explainability Interface
+</div>
+ 
+<imgition_b.png"
+title="Click to enlarge"
+>
+ 
+<div class="zoom-hint">
+Click image to enlarge for closer inspection
+</div>
+ 
+<p class="img-desc">
+The AI displays bounding boxes around detected objects and a confidence
+score (0.00–0.99) above each. Green boxes indicate high-confidence
+detections. Total Red Circles = 13.
+</p>
+</div>
+ 
+<!-- FORM BELOW -->
+ 
+<div id="form-area">
+ 
+<h2>Please complete the checklist below</h2>
+ 
+<p class="checklist-instruction">
+Review the Condition B image above and answer all questions.
+</p>
+ 
+<form id="evaluationForm">
+ 
+<!-- Keep your existing First Name field -->
+ 
+<!-- Keep your existing Last Name field -->
+ 
+<!-- Keep Q1 -->
+ 
+<!-- Keep Q2 -->
+ 
+<!-- Keep Q3 -->
+ 
+<!-- Keep Q4 -->
+ 
+<div id="error-msg">
+⚠ Please answer all questions before submitting.
+</div>
+ 
+<button
+type="button"
+class="submit-btn"
+onclick="handleSubmit()">
+Submit Evaluation
+</button>
+ 
+</form>
+ 
+</div>
+ 
+<div id="success-panel">
+<div class="check-icon">✓</div>
+<h2>Submitted Successfully!</h2>
+<p>
+Thank you for completing the evaluation.
+Your responses have been recorded.
+</p>
+</div>
+ 
+</div>
+ 
+</div>
 
 
 </div> <!-- evaluation-layout -->
