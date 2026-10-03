@@ -756,8 +756,14 @@ body: JSON.stringify(payload)
 )
 .then(() => {
 errMsg.style.display = "none";
-document.ock";
+ 
+document.getElementById('form-area').style.display = 'none';
+document.getElementById('success-panel').style.display = 'block';
+})
+.catch(error => {
+console.error(error);
 });
+`
 
   // ⭐ Show success panel
   errMsg.style.display = 'none';
