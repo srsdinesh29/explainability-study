@@ -72,6 +72,7 @@ display: flex;
 flex-direction: column;
 }
 
+
 .large-condition-image {
 max-width: 900px !important;
 width: 100%;
@@ -84,6 +85,16 @@ gap: 20px;
 align-items: flex-start;
 }
  
+.large-condition-image {
+overflow: hidden;
+}
+
+.large-condition-image img {
+padding: 0;
+transform: scale(1.2);
+transform-origin: center;
+}
+
 .image-form-row .large-condition-image {
 flex: 1;
 margin: 0;
